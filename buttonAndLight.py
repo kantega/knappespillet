@@ -2,14 +2,14 @@
 import time
 from RPi import GPIO
 import board
-# import busio
-# import digitalio
+import busio
+import digitalio
 
 # Initialize the I2C bus:
-# i2c = busio.I2C(board.SCL, board.SDA)
-# mcp = MCP23017(i2c)  # MCP23017
+i2c = busio.I2C(board.SCL, board.SDA)
+mcp = MCP23017(i2c)  # MCP23017
 
-# pin_A0 = mcp.get_pin(0)
+pin_A0 = mcp.get_pin(0)
 # pin_A1 = mcp.get_pin(1)
 # pin_A2 = mcp.get_pin(2)
 # pin_A3 = mcp.get_pin(3)
@@ -19,7 +19,7 @@ import board
 # pin_A7 = mcp.get_pin(7)
 # pin_B7 = mcp.get_pin(15)
 
-GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # button1 = board.GPIO1
 
 # button2 = board.GPIO17
@@ -27,7 +27,7 @@ GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # pin_A1.direction = digitalio.Direction.INPUT
 
-# pin_A0.pull = digitalio.Pull.UP
+pin_A0.pull = digitalio.Pull.UP
 # pin_A1.pull = digitalio.Pull.UP
 # pin_A2.pull = digitalio.Pull.UP
 # pin_A3.pull = digitalio.Pull.UP
