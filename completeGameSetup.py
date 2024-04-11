@@ -11,15 +11,16 @@ Start script by standing in the same directory as the script and run it using th
 python completeGameSetup.py
 
 """
-
-from adafruit_mcp23017 import MCP23017
+from adafruit_mcp230xx.mcp23017 import MCP23017
 import time
 import busio
 import digitalio
 import board
-import neoPixel
+import neopixel
 import random
-import emoji
+import board
+import busio
+from adafruit_mcp230xx.mcp23017 import MCP23017
 
 # Choose an open pin connected to the Data In of the NeoPixel strip, i.e. board.D18
 # NeoPixels must be connected to D10, D12, D18 or D21 to work.
@@ -131,14 +132,32 @@ while True:
             break
     
     # Print the emoji matrix
+    counter = 0
+
     for row in range(3):
         for col in range(3):
             if (row * 3) + col + 1 == active_button:
-                print(emoji.emojize(":red_circle:", use_aliases=True), end=" ")
+                print("🟢")
             else:
-                print(emoji.emojize(":white_circle:", use_aliases=True), end=" ")
+                print("⚪️")
         print()
 
     print("Counter:", counter)
 
-    #TODO: Add a way to wait for a button press and check if the button press is correct
+    # Create I2C bus
+    i2c = busio.I2C(board.SCL, board.SDA)
+
+    # Check I2C connection and device address
+    if not i2c.try_lock():
+        raise ValueError("Unable to acquire I2C bus lock")
+    try:
+        devices = i2c.scan()
+        if not 0x20 in devices:
+            raise ValueError("No I2C device at address: 0x20")
+    finally:
+        i2c.unlock()
+
+    # Initialize MCP23017
+    mcp = MCP23017(i2c, address=0x20)
+
+    # TODO: Add a way to wait for a button press and check if the button press is correct

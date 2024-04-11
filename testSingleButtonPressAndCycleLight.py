@@ -25,12 +25,28 @@ pixels = neopixel.NeoPixel(
     pixel_pin, NUM_PIXELS, brightness=0.2, auto_write=False, pixel_order=ORDER
 )
 
+print("STARTING testSingleButtonPressAndCycleLight script")
 
 red_color = (255, 0, 0)
 green_color = (0, 255, 0)
+blue_color = (0, 255, 255)
+
+def cycle_trough_each_ring():
+    for i in range(NUMBER_OF_CONNECTED_PIXEL_RINGS):
+        pixels.fill((0,0,0))
+        for j in range(PIXELS_PER_PIXEL_RING):
+            pixels[i* PIXELS_PER_PIXEL_RING + j ] = blue_color
+        time.sleep(0.04)
+        pixels.show()
+
+cycle_trough_each_ring()
+print("INITIALIZING pixels with color green")
+pixels.fill(green_color)
+pixels.show()
+
 while True:
     button_is_clicked = GPIO.input(BUTTON_GPIO_PIN) 
     current_color = green_color if button_is_clicked else red_color 
-    pixels.show()
     pixels.fill(current_color)
-    time.sleep(0.1)
+    pixels.show()
+    time.sleep(0.01)

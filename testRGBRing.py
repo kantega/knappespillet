@@ -2,9 +2,50 @@
 # SPDX-License-Identifier: MIT
 
 # Simple test for NeoPixels on Raspberry Pi
+
 import time
 import board
 import neopixel
+
+
+# ---------- Expander stuff ---------
+import busio
+import digitalio
+from RPi import GPIO
+from adafruit_mcp230xx.mcp23017 import MCP23017
+
+# Initialize the I2C bus:
+i2c = busio.I2C(board.SCL, board.SDA)
+mcp = MCP23017(i2c)  # MCP23017
+
+pin_A0 = mcp.get_pin(0)
+pin_A1 = mcp.get_pin(1)
+pin_A2 = mcp.get_pin(2)
+pin_A3 = mcp.get_pin(3)
+pin_A4 = mcp.get_pin(4)
+pin_A5 = mcp.get_pin(5)
+pin_A6 = mcp.get_pin(6)
+pin_A7 = mcp.get_pin(7)
+pin_B7 = mcp.get_pin(15)
+
+GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+button1 = board.GPIO1
+button2 = board.GPIO17
+button3 = board.GPI22
+
+pin_A1.direction = digitalio.Direction.INPUT
+
+pin_A0.pull = digitalio.Pull.UP
+pin_A1.pull = digitalio.Pull.UP
+pin_A2.pull = digitalio.Pull.UP
+pin_A3.pull = digitalio.Pull.UP
+pin_A4.pull = digitalio.Pull.UP
+pin_A5.pull = digitalio.Pull.UP
+pin_A6.pull = digitalio.Pull.UP
+pin_A7.pull = digitalio.Pull.UP
+pin_B7.pull = digitalio.Pull.UP
+# --------------------
 
 
 # Choose an open pin connected to the Data In of the NeoPixel strip, i.e. board.D18
@@ -12,7 +53,7 @@ import neopixel
 pixel_pin = board.D18
 
 # The number of NeoPixels
-num_pixels = 24
+num_pixels = 35 * 12 
 
 # The order of the pixel colors - RGB or GRB. Some NeoPixels have red and green reversed!
 # For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
@@ -85,4 +126,4 @@ while True:
     pixels.show()
     time.sleep(1)
 
-    cycle_through_pixels(0.1)  # rainbow cycle with 1ms delay per step
+    # cycle_through_pixels(0.1)  # rainbow cycle with 1ms delay per step
