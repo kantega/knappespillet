@@ -80,35 +80,35 @@ row3column6 = mcp3.get_pin(6)
 row4column6 = mcp4.get_pin(6)
 
 all_buttons = [
-row0column0 ,  
-row1column0 ,
-row2column0 ,
-row3column0 ,
-row4column0 ,
+row0column0,  
+row1column0,
+row2column0,
+row3column0,
+row4column0,
 
-# row0column1 ,
-# row1column1 ,
-# row2column1 ,
-# row3column1 ,
-# row4column1 ,
+# row0column1,
+# row1column1,
+# row2column1,
+# row3column1,
+# row4column1,
 
-# row0column2 ,
-# row1column2 ,
-# row2column2 ,
-# row3column2 ,
-# row4column2 ,
+# row0column2,
+# row1column2,
+# row2column2,
+# row3column2,
+# row4column2,
 
-# row0column3 ,
-# row1column3 ,
-# row2column3 ,
-# row3column3 ,
-# row4column3 ,
+# row0column3,
+# row1column3,
+# row2column3,
+# row3column3,
+# row4column3,
 
-# row0column4 ,
-# row1column4 ,
-# row2column4 ,
-# row3column4 ,
-# row4column4 ,
+# row0column4,
+# row1column4,
+# row2column4,
+# row3column4,
+# row4column4,
 
 row0column5,
 row1column5,
@@ -165,7 +165,50 @@ pixels.fill(green_color)
 pixels.show()
 # Now loop blinking the pin 0 output and reading the state of pin 1 input.
 while True:
-    any_button_is_clicked = any(all_buttons)
+    all_buttons_values = [
+row0column0.value,  
+row1column0.value,
+row2column0.value,
+row3column0.value,
+row4column0.value,
+
+# row0column1.value,
+# row1column1.value,
+# row2column1.value,
+# row3column1.value,
+# row4column1.value,
+
+# row0column2.value,
+# row1column2.value,
+# row2column2.value,
+# row3column2.value,
+# row4column2.value,
+
+# row0column3.value,
+# row1column3.value,
+# row2column3.value,
+# row3column3.value,
+# row4column3.value,
+
+# row0column4.value,
+# row1column4.value,
+# row2column4.value,
+# row3column4.value,
+# row4column4.value,
+
+row0column5.value,
+row1column5.value,
+row2column5.value,
+row3column5.value,
+row4column5.value,
+
+row0column6.value,
+row1column6.value,
+row2column6.value,
+row3column6.value,
+row4column6.value,
+]
+    any_button_is_clicked = any(all_buttons_values)
     current_color = green_color if any_button_is_clicked else red_color 
     pixels.fill(current_color)
     pixels.show()
