@@ -42,29 +42,29 @@ row2column0 = mcp2.get_pin(0)
 row3column0 = mcp3.get_pin(0)
 row4column0 = mcp4.get_pin(0)
 
-# row0column1 = mcp0.get_pin(1)
-# row1column1 = mcp1.get_pin(1)
-# row2column1 = mcp2.get_pin(1)
-# row3column1 = mcp3.get_pin(1)
-# row4column1 = mcp4.get_pin(1)
+row0column1 = mcp0.get_pin(1)
+row1column1 = mcp1.get_pin(1)
+row2column1 = mcp2.get_pin(1)
+row3column1 = mcp3.get_pin(1)
+row4column1 = mcp4.get_pin(1)
 
-# row0column2 = mcp0.get_pin(2)
-# row1column2 = mcp1.get_pin(2)
-# row2column2 = mcp2.get_pin(2)
-# row3column2 = mcp3.get_pin(2)
-# row4column2 = mcp4.get_pin(2)
+row0column2 = mcp0.get_pin(2)
+row1column2 = mcp1.get_pin(2)
+row2column2 = mcp2.get_pin(2)
+row3column2 = mcp3.get_pin(2)
+row4column2 = mcp4.get_pin(2)
 
-# row0column3 = mcp0.get_pin(3)
-# row1column3 = mcp1.get_pin(3)
-# row2column3 = mcp2.get_pin(3)
-# row3column3 = mcp3.get_pin(3)
-# row4column3 = mcp4.get_pin(3)
+row0column3 = mcp0.get_pin(3)
+row1column3 = mcp1.get_pin(3)
+row2column3 = mcp2.get_pin(3)
+row3column3 = mcp3.get_pin(3)
+row4column3 = mcp4.get_pin(3)
 
-# row0column4 = mcp0.get_pin(4)
-# row1column4 = mcp1.get_pin(4)
-# row2column4 = mcp2.get_pin(4)
-# row3column4 = mcp3.get_pin(4)
-# row4column4 = mcp4.get_pin(4)
+row0column4 = mcp0.get_pin(4)
+row1column4 = mcp1.get_pin(4)
+row2column4 = mcp2.get_pin(4)
+row3column4 = mcp3.get_pin(4)
+row4column4 = mcp4.get_pin(4)
 
 
 row0column5 = mcp0.get_pin(5)
@@ -86,29 +86,29 @@ row2column0,
 row3column0,
 row4column0,
 
-# row0column1,
-# row1column1,
-# row2column1,
-# row3column1,
-# row4column1,
+row0column1,
+row1column1,
+row2column1,
+row3column1,
+row4column1,
 
-# row0column2,
-# row1column2,
-# row2column2,
-# row3column2,
-# row4column2,
+row0column2,
+row1column2,
+row2column2,
+row3column2,
+row4column2,
 
-# row0column3,
-# row1column3,
-# row2column3,
-# row3column3,
-# row4column3,
+row0column3,
+row1column3,
+row2column3,
+row3column3,
+row4column3,
 
-# row0column4,
-# row1column4,
-# row2column4,
-# row3column4,
-# row4column4,
+row0column4,
+row1column4,
+row2column4,
+row3column4,
+row4column4,
 
 row0column5,
 row1column5,
@@ -145,7 +145,7 @@ pixels = neopixel.NeoPixel(
 
 print("STARTING testSingleButtonPressAndCycleLight script")
 
-red_color = (255, 0, 0)
+red_color = (255, 0, 255)
 green_color = (0, 255, 0)
 blue_color = (0, 255, 255)
 
@@ -172,29 +172,29 @@ row2column0.value,
 row3column0.value,
 row4column0.value,
 
-# row0column1.value,
-# row1column1.value,
-# row2column1.value,
-# row3column1.value,
-# row4column1.value,
+row0column1.value,
+row1column1.value,
+row2column1.value,
+row3column1.value,
+row4column1.value,
 
-# row0column2.value,
-# row1column2.value,
-# row2column2.value,
-# row3column2.value,
-# row4column2.value,
+row0column2.value,
+row1column2.value,
+row2column2.value,
+row3column2.value,
+row4column2.value,
 
-# row0column3.value,
-# row1column3.value,
-# row2column3.value,
-# row3column3.value,
-# row4column3.value,
+row0column3.value,
+row1column3.value,
+row2column3.value,
+row3column3.value,
+row4column3.value,
 
-# row0column4.value,
-# row1column4.value,
-# row2column4.value,
-# row3column4.value,
-# row4column4.value,
+row0column4.value,
+row1column4.value,
+row2column4.value,
+row3column4.value,
+row4column4.value,
 
 row0column5.value,
 row1column5.value,
@@ -212,10 +212,4 @@ row4column6.value,
     current_color = green_color if any_button_is_clicked else red_color 
     pixels.fill(current_color)
     pixels.show()
-    time.sleep(0.01)
-    # Read pin 1 and print its state.
-    # print("Pin0 Board0: {0} Board1: {1} Board2: {2} Board3: {3} Board4: {4}".format(board0pin0.value, board1pin0.value, board2pin0.value, board3pin0.value, board4pin0.value))
-
-    # print("Pin6 Board0: {0} Board1: {1} Board2: {2} Board3: {3} Board4: {4}".format(board0pin6.value, board1pin6.value, board2pin6.value, board3pin6.value, board4pin6.value))
-
-#This expander test worked with 2 expanders daisy chained: 11.04.23 - Magnus, Nikolai, Erik
+    time.sleep(0.005)
