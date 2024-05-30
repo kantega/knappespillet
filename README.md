@@ -16,3 +16,4 @@ SSH til Raspberry Pi:
     3. Host/Hostname: makerspace.local User: pi Password: raspberry
        
      
+Kan gjøre kode lokalt og kopiere den over på pien gjennom scp -r pi@makerspac.local:/filepath

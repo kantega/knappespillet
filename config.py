@@ -88,6 +88,9 @@ class GameBoard:
     def __get_button(self, row: int, column: int):
         return self.buttons[f"x{row}y{column}"]
 
+    def get_button(self, row: int, column: int):
+        return self.__get_button(row, column)
+
     def is_button_pressed(self, row: int, column: int) -> bool:
         button = self.__get_button(row, column)
         return button.value
