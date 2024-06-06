@@ -80,7 +80,7 @@ class GameBoard:
 
     def __get_all_buttons(self):
         return self.buttons.values()
-
+    
     def is_any_button_pressed(self):
         all_buttons_values = [button.value for button in self.__get_all_buttons()]
         return any(all_buttons_values)
