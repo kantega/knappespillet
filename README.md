@@ -21,9 +21,12 @@ Kan gjøre kode lokalt og kopiere den over på pien gjennom scp -r pi@makerspac.
 ## Utvikling
 
 ### Nødvendige python pakker for å kjøre koden
-- `pip install adafruit-circuitpython-neopixel`
-- `pip install adafruit-circuitpython-busdevice`
-- `pip install adafruit-circuitpython-mcp230xx`
+- `sudo pip3 install adafruit-blinka`
+- `sudo pip3 install adafruit-circuitpython-neopixel`
+- `sudo pip3 install adafruit-circuitpython-busdevice`
+- `sudo pip3 install adafruit-circuitpython-mcp230xx`
+
+Kjør med alle med --break-system-packages hvis det klager og du ikke bryr deg om python miljøet ditt
 
 ### I2C Error?
 Hvis koden klager på en feil med I2C så kan det være at I2C-bus på RaspberryPien har blitt disabled.
