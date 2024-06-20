@@ -17,3 +17,15 @@ SSH til Raspberry Pi:
        
      
 Kan gjøre kode lokalt og kopiere den over på pien gjennom scp -r pi@makerspac.local:/filepath
+
+## Utvikling
+
+### Nødvendige python pakker for å kjøre koden
+- `pip install adafruit-circuitpython-neopixel`
+- `pip install adafruit-circuitpython-busdevice`
+- `pip install adafruit-circuitpython-mcp230xx`
+
+### I2C Error?
+Hvis koden klager på en feil med I2C så kan det være at I2C-bus på RaspberryPien har blitt disabled.
+Slå det på igjen:
+- `sudo raspi-config` -> Interfacing Options -> I2C -> Enable I2C
