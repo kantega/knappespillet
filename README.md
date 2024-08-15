@@ -1,27 +1,40 @@
-# Tap Dance
+# Knappespillet
 
 Games for the Kantega wall project.
 
-### Emulate
+### Local development setup
+
+#### Prerequesist
+- python3 
+- python3 virtualenv
+
+#### Installing dependencies
 
 ```sh
-sudo dnf install python3 python3-pygame
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.emulate.txt
 ```
+
+
+### Emulate
 
 ```sh
 python3 src/emulate.py
 ```
 
-### Run
+### Initial setup of Raspberry Pi
+
+
 
 ```sh
-pip install adafruit-circuitpython-busdevice
-pip install adafruit-circuitpython-neopixel
-pip install adafruit-circuitpython-mcp230xx
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
 ```sh
-sudo python3 src/run.py
+sudo venv/bin/python src/run.py
 ```
 
 
