@@ -5,6 +5,7 @@ After=multi-user.target
 
 [Service]
 ExecStart=/home/makerspace/knappespillet/venv/bin/python3 src/autorun.py
+ExecStop=/home/makerspace/knappespillet/venv/bin/python3 TestScripts/ExecStop.py
 WorkingDirectory=/home/makerspace/knappespillet
 Restart=always
 RestartSec=10s
