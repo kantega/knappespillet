@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import busio
 import digitalio
 import board
