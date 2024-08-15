@@ -4,7 +4,8 @@ After=multi-user.target
 
 
 [Service]
-ExecStart=/usr/bin/python3 /home/pi/knappespillet/testConfig.py
+ExecStart=/home/makerspace/knappespillet/venv/bin/python3 src/autorun.py
+WorkingDirectory=/home/makerspace/knappespillet
 Restart=always
 RestartSec=10s
 KillMode=process

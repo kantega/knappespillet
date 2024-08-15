@@ -2,13 +2,13 @@
 
 Games for the Kantega wall project.
 
-### Local development setup
+# Local development setup
 
-#### Prerequesist
+## Prerequesist
 - python3 
 - python3 virtualenv
 
-#### Installing dependencies
+## Installing dependencies
 
 ```sh
 python3 -m venv venv
@@ -16,16 +16,23 @@ source venv/bin/activate
 pip install -r requirements.emulate.txt
 ```
 
-
-### Emulate
+## Emulate
 
 ```sh
 python3 src/emulate.py
 ```
 
-### Initial setup of Raspberry Pi
+# Development/Setup on RPi
+
+## Connecting to RPi with SSH
+
+```sh
+ssh makerspace@knappespillet.local  
+```
+Password: raspberry
 
 
+## Initial setup of Raspberry Pi
 
 ```sh
 python3 -m venv venv
@@ -36,6 +43,8 @@ pip install -r requirements.txt
 ```sh
 sudo venv/bin/python src/run.py
 ```
+
+
 
 
 ### TODO
