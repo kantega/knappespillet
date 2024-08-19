@@ -9,7 +9,7 @@ class TestCounter:
 
         self.time = 0
 
-    def update(self, pressed_buttons: set[(int, int)]):
+    def update(self, pressed_buttons: set[(int, int)], **kwargs):
         self.time += 1
 
     def render(self, pressed_buttons: set[(int, int)]) -> Board:

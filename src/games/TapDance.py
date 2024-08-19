@@ -1,10 +1,11 @@
+import math
 from random import randint
 
 from Board import Board
 from Light import Light, WHITE, CYAN, MAGENTA, YELLOW, GREEN, RED
-from utils import rotate
+from utils import clamp, rotate
 
-
+QUIT_GAME_BUTTON_COORD = (0,6)
 class TapDance:
     def __init__(self):
         self.name = "TapDance"
@@ -17,8 +18,11 @@ class TapDance:
         self.next = ['up', 'down', 'right', 'left']
         self.fail_buttons = []
 
-    def update(self, pressed_buttons: set[(int, int)]):
+    def update(self, pressed_buttons: set[(int, int)],  **kwargs):
         if self.state == 'waiting':
+            if QUIT_GAME_BUTTON_COORD in pressed_buttons and "go_to_main_menu" in kwargs:
+                self.state = "quit"
+                self.time = 0
             if (2, 2) in pressed_buttons and (2, 4) in pressed_buttons:
                 self.state = 'playing'
                 self.time = 0
@@ -26,6 +30,18 @@ class TapDance:
                 self.next = ['up', 'down', 'right', 'left']
                 self.fail_buttons = []
                 return
+        
+        elif self.state == "quit":
+            if QUIT_GAME_BUTTON_COORD not in pressed_buttons:
+                self.state = "waiting"
+                self.time = 0
+                return
+
+            if self.time > 60:
+                go_to_main_menu = kwargs["go_to_main_menu"]
+                return go_to_main_menu()
+
+            self.time += 1
 
         elif self.state == 'playing':
 
@@ -73,6 +89,8 @@ class TapDance:
         if self.state == 'waiting':
             board.buttons[(2, 2)].set_all_lights(GREEN)
             board.buttons[(2, 4)].set_all_lights(GREEN)
+            board.buttons[QUIT_GAME_BUTTON_COORD].set_all_lights(RED)
+
 
         if self.state == 'playing':
             for row in range(board.num_rows):
@@ -119,6 +137,13 @@ class TapDance:
 
             if self.time >= 60:
                 board.show_two_digit_number(self.score, CYAN * number_intensity)
+
+        elif self.state == "quit":
+            button = board.buttons[QUIT_GAME_BUTTON_COORD]
+            hold_progress = clamp(1, self.time, 60) / 60
+            number_of_lights = math.ceil(hold_progress * button.num_lights)
+            button.set_n_lights(number_of_lights, YELLOW)
+            return board
 
         for (row, col) in pressed_buttons:
             board.buttons[(row, col)].set_all_lights(WHITE)

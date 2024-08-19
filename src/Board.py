@@ -33,3 +33,7 @@ class Board:
         n2 = n % 10
         self.show_char(0, 0, str(n1), light)
         self.show_char(0, 4, str(n2), light)
+    
+    def light_column(self, col: int, light: Light):
+        for i in range(self.num_rows):
+            self.buttons[(i, col)].set_all_lights(light)

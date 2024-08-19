@@ -11,3 +11,9 @@ class Button:
     def set_all_lights(self, light: Light):
         for i in range(self.num_lights):
             self.lights[i] = light
+
+    def set_n_lights(self, n, light: Light):
+        for i in range(n):
+            self.lights[i] = light
+        for i in range(n, self.num_lights):
+            self.lights[i] = Light(0, 0, 0)

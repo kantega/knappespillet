@@ -1,9 +1,12 @@
+import math
 from random import randint
 
 from Board import Board
-from Light import Light, CYAN, GREEN, WHITE
+from Light import RED, YELLOW, Light, CYAN, GREEN, WHITE
 from utils import clamp
 
+
+QUIT_GAME_BUTTON_COORD = (0,6)
 
 class TapTendrils:
     def __init__(self):
@@ -16,8 +19,12 @@ class TapTendrils:
         self.tendrils = [Tendril(i) for i in range(7)]
         self.lives = [True for _ in range(7)]
 
-    def update(self, pressed_buttons: set[(int, int)]):
+    def update(self, pressed_buttons: set[(int, int)], go_to_main_menu):
         if self.state == 'waiting':
+            if QUIT_GAME_BUTTON_COORD in pressed_buttons:
+                self.state = "quit"
+                self.time = 0
+
             if (2, 3) in pressed_buttons:
                 self.state = 'playing'
                 self.time = 0
@@ -25,6 +32,17 @@ class TapTendrils:
                 self.tendrils = [Tendril(i) for i in range(7)]
                 self.lives = [True for _ in range(7)]
                 return
+        
+        elif self.state == "quit":
+            if QUIT_GAME_BUTTON_COORD not in pressed_buttons:
+                self.state = "waiting"
+                self.time = 0
+                return
+
+            if self.time > 60:
+                return go_to_main_menu()
+
+            self.time += 1
 
         elif self.state == 'playing':
             # Update tendrils
@@ -67,6 +85,7 @@ class TapTendrils:
                 self.state = 'waiting'
                 return
 
+
         self.time += 1
 
     def render(self, pressed_buttons: set[(int, int)]) -> Board:
@@ -74,6 +93,7 @@ class TapTendrils:
 
         if self.state == 'waiting':
             board.buttons[(2,3)].set_all_lights(GREEN)
+            board.buttons[QUIT_GAME_BUTTON_COORD].set_all_lights(RED)
 
         if self.state == 'playing':
             if self.time < 30:
@@ -130,6 +150,13 @@ class TapTendrils:
 
             if self.time >= 60:
                 board.show_two_digit_number(self.score, CYAN * number_intensity)
+
+        elif self.state == "quit":
+            button = board.buttons[QUIT_GAME_BUTTON_COORD]
+            hold_progress = clamp(1, self.time, 60) / 60
+            number_of_lights = math.ceil(hold_progress * button.num_lights)
+            button.set_n_lights(number_of_lights, YELLOW)
+            return board
 
         for (row, col) in pressed_buttons:
             board.buttons[(row, col)].set_all_lights(WHITE)

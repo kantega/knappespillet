@@ -7,7 +7,7 @@ class TestAlignment:
         self.name = "[Test] Alignment"
         self.desc = "Test pattern to adjust alignment. Should have red top, green sides and blue bottom."
 
-    def update(self, pressed_buttons: set[(int, int)]):
+    def update(self, pressed_buttons: set[(int, int)], **kwargs):
         pass
 
     def render(self, pressed_buttons: set[(int, int)]) -> Board:

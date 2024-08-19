@@ -1,3 +1,4 @@
+from Menu import Menu
 from games.TapDance import TapDance
 from games.TapTendrils import TapTendrils
 from games.TestAlignment import TestAlignment
@@ -6,7 +7,14 @@ from games.TestMarquee import TestMarquee
 
 
 def select_game() -> any:
-    games = [TapDance(), TapTendrils(), TestAlignment(), TestCounter(), TestMarquee()]
+    games = [
+        Menu(),
+        TapDance(),
+        TapTendrils(),
+        TestAlignment(),
+        TestCounter(),
+        TestMarquee(),
+    ]
     options = [f"{game.name} - {game.desc}" for game in games]
     index = select("Select game:", options)
     return games[index]

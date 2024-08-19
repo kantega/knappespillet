@@ -10,6 +10,13 @@ from cli import select_game, select
 from interrupt import is_interrupted, handle_interrupts
 
 KEYBOARD_LAYOUTS = {
+    "querty-top": [
+        ["1", "2", "3", "4", "5", "6", "7"],
+        ["q", "w", "e", "r", "t", "y", "u"],
+        ["a", "s", "d", "f", "g", "h", "j"],
+        ["z", "x", "c", "v", "b", "n", "m"],
+        [None, None, None, None, None, None, None],
+    ],
     "qwerty": [
         [None, None, None, None, None, None, None],
         ["q", "w", "e", "r", "t", "y", "u"],
@@ -37,11 +44,13 @@ KEYBOARD_LAYOUTS = {
         [None, "a", "r", "s", "t", "d", None],
         [None, "z", "x", "c", "v", "b", None],
         [None, None, None, None, None, None, None],
-    ]
+    ],
 }
 
 
-def draw_board(surface: Surface, font: Font, keyboard_layout: list[list[str]], board: Board):
+def draw_board(
+    surface: Surface, font: Font, keyboard_layout: list[list[str]], board: Board
+):
     surface.fill((60, 20, 60))
     for row in range(board.num_rows):
         for col in range(board.num_cols):
@@ -51,7 +60,9 @@ def draw_board(surface: Surface, font: Font, keyboard_layout: list[list[str]], b
             draw_button(surface, font, center, key_char, button)
 
 
-def draw_button(surface: Surface, font: Font, center: Vector2, key_char: str, button: Button):
+def draw_button(
+    surface: Surface, font: Font, center: Vector2, key_char: str, button: Button
+):
     average_light = Light(0, 0, 0)
     for light in button.lights:
         average_light += light * (1 / 12)
@@ -61,11 +72,15 @@ def draw_button(surface: Surface, font: Font, center: Vector2, key_char: str, bu
     pygame.draw.circle(surface, (100, 100, 100), center, 20, 1)
     for index, light in enumerate(button.lights):
         offset = Vector2(0, -12).rotate(15).rotate(index * 30)
-        pygame.draw.circle(surface, to_color(background_light | light), center + offset, 2)
+        pygame.draw.circle(
+            surface, to_color(background_light | light), center + offset, 2
+        )
 
     if key_char is not None:
         key_light = background_light + Light(0.7, 0.7, 0.7)
-        font.render_to(surface, center + Vector2(-4, -4), key_char.upper(), to_color(key_light))
+        font.render_to(
+            surface, center + Vector2(-4, -4), key_char.upper(), to_color(key_light)
+        )
 
 
 def to_color(light: Light) -> Color:
