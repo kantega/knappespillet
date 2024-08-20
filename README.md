@@ -24,13 +24,24 @@ python3 src/emulate.py
 
 # Development/Setup on RPi
 
+
 ## Connecting to RPi with SSH
+
+> Must be on the KantegaWireless network
 
 ```sh
 ssh makerspace@knappespillet.local  
 ```
 Password: raspberry
 
+
+## Deployment
+When you want to deploy the latest changes in master, you can
+
+```sh
+sh deploy.sh
+```
+Password: raspberry
 
 ## Initial setup of Raspberry Pi
 
@@ -43,7 +54,6 @@ pip install -r requirements.txt
 ```sh
 sudo venv/bin/python src/run.py
 ```
-
 
 
 
