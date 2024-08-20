@@ -19,7 +19,7 @@ class TapTendrils:
         self.tendrils = [Tendril(i) for i in range(7)]
         self.lives = [True for _ in range(7)]
 
-    def update(self, pressed_buttons: set[(int, int)], go_to_main_menu):
+    def update(self, pressed_buttons: set[(int, int)], **kwargs):
         if self.state == 'waiting':
             if QUIT_GAME_BUTTON_COORD in pressed_buttons:
                 self.state = "quit"
@@ -40,6 +40,7 @@ class TapTendrils:
                 return
 
             if self.time > 60:
+                go_to_main_menu = kwargs["go_to_main_menu"]
                 return go_to_main_menu()
 
             self.time += 1

@@ -1,3 +1,4 @@
+from typing import List
 from Light import Light
 
 
@@ -17,3 +18,8 @@ class Button:
             self.lights[i] = light
         for i in range(n, self.num_lights):
             self.lights[i] = Light(0, 0, 0)
+
+    def set_lights(self, lights: List[Light]):
+        if len(lights) != self.num_lights:
+            raise ValueError(f"Length of lights is not {self.num_lights}, was {len(lights)}")
+        self.lights = lights

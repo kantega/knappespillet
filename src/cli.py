@@ -1,4 +1,5 @@
 from Menu import Menu
+from games.TimeBombs import TimeBombs
 from games.TapDance import TapDance
 from games.TapTendrils import TapTendrils
 from games.TestAlignment import TestAlignment
@@ -11,6 +12,7 @@ def select_game() -> any:
         Menu(),
         TapDance(),
         TapTendrils(),
+        TimeBombs(),
         TestAlignment(),
         TestCounter(),
         TestMarquee(),
