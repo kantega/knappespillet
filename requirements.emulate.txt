@@ -3,4 +3,3 @@ imageio==2.35.0
 numpy==1.26.4
 pillow==10.4.0
 pygame==2.6.0
-PyQt5==5.15.11
