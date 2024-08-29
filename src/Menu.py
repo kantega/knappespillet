@@ -10,6 +10,7 @@ from games.TapDance import TapDance
 from games.TapTendrils import TapTendrils
 from games.TickTackToe import TickTackToe
 from games.TimeBombs import TimeBombs
+from games.Python import Python
 from Light import GREEN, MAGENTA, RED, YELLOW
 from utils import clamp
 
@@ -36,6 +37,7 @@ class Menu:
             (0,4): CatchTheLight(),
             (0,5): SimonSays(),
             (0,6): ConnectFour(),
+            (1,0): Python(),
         }
         self.game_coords = self._get_game_coords()
         self.playing_game = None
