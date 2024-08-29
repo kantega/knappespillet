@@ -22,8 +22,8 @@ class SimonSays:
         self.current_step = 0
         self.scene_change_time = 30  # 1 second at 30 fps (adjust this value based on actual frame rate)
         self.display_delay = 20  # Number of frames to wait between displaying each button (slower display)
-        self.light_on_time = 20  # Time each light stays on during the sequence display
-        self.correct_blink_time = 30  # Time to blink the correct button in blue before the next sequence
+        self.light_on_time = 10  # Time each light stays on during the sequence display
+        self.correct_blink_time = 5  # Time to blink the correct button in blue before the next sequence
 
         self.button_colors = [BLUE, GREEN, RED, YELLOW]
 
@@ -57,7 +57,6 @@ class SimonSays:
                 
             elif self.state == "quit":
                 self.time += 1
-                print(self.time)
                 if QUIT_GAME_BUTTON_COORD not in pressed_buttons:
                     self.state = "waiting"
                     self.time = 0
