@@ -1,9 +1,10 @@
 import math
 import random
-import time
 from typing import List
 
 from Board import Board
+from HighScoreDisplay import display_high_scores
+from HighScoreManager import read_high_scores, write_high_score
 from Light import BLUE, GREEN, RED, WHITE, YELLOW, Light
 from utils import clamp
 
@@ -14,6 +15,7 @@ class SimonSays:
     def __init__(self):
         self.name = "Simon Says"
         self.desc = "Repeat the sequence of lights!"
+        self.file_name = "simon_says_high_scores.txt"
 
         self.state = 'waiting'
         self.sequence: List[tuple[int, int]] = []
@@ -44,9 +46,6 @@ class SimonSays:
 
     def update(self, pressed_buttons: set[tuple[int, int]], **kwargs):
         try:
-            # Always check for the quit button press
-
-
             if self.state == 'waiting':
                 if QUIT_GAME_BUTTON_COORD in pressed_buttons:
                     self.state = "quit"
@@ -126,6 +125,13 @@ class SimonSays:
             elif self.state == 'game_over':
                 self.time += 1
                 if self.time > 100:  # Show "Game Over" for a short time
+                    # Write the high score to file
+                    write_high_score(len(self.sequence), self.file_name)
+                    
+                    # Display high scores
+                    high_scores = read_high_scores(self.file_name)
+                    display_high_scores(high_scores)
+                    
                     self.state = 'waiting'
                     self.time = 0
                     self.sequence.clear()
@@ -140,7 +146,6 @@ class SimonSays:
         # Always set the quit button to red
         board.buttons[QUIT_GAME_BUTTON_COORD].set_all_lights(RED)
     
-
         if self.state == 'waiting':
             # Light up all buttons in GREEN to indicate readiness
             for row in range(5):
@@ -162,7 +167,7 @@ class SimonSays:
             for row in range(5):
                 for col in range(7):
                     if (row, col) != QUIT_GAME_BUTTON_COORD:
-                        board.buttons[(row, col)].set_all_lights(WHITE)
+                        board.buttons[(row, col)].set_all_lights(Light(0, 0, 0))
 
         elif self.state == 'display_sequence':
             if self.current_step < len(self.sequence):
@@ -171,11 +176,6 @@ class SimonSays:
                 board.buttons[(row, col)].set_all_lights(YELLOW)
 
         elif self.state == 'player_turn':
-            # Indicate the player's turn with a WHITE glow on the entire board
-            for row in range(5):
-                for col in range(7):
-                    if (row, col) != QUIT_GAME_BUTTON_COORD:
-                        board.buttons[(row, col)].set_all_lights(WHITE)
 
             # Highlight the player's current input in BLUE
             for move in self.player_input:
@@ -198,6 +198,7 @@ class SimonSays:
 
         return board
 
+# Utility function for handling single button press
 def assert_single_button_press(pressed_buttons: set[tuple[int, int]]):
     if len(pressed_buttons) is None or len(pressed_buttons) == 0:
         raise NotSingleButtonPressException("No pressed buttons")
@@ -205,6 +206,7 @@ def assert_single_button_press(pressed_buttons: set[tuple[int, int]]):
         raise NotSingleButtonPressException("Multiple pressed buttons")
     return pressed_buttons.pop()
 
+# Exception for handling incorrect button presses
 class NotSingleButtonPressException(Exception):
     def __init__(self, msg: str): 
         self.msg = msg
