@@ -4,7 +4,7 @@ import time
 from typing import List
 
 from Board import Board
-from Light import BLUE, GREEN, RED, YELLOW, WHITE, Light
+from Light import BLUE, GREEN, RED, WHITE, YELLOW, Light
 from utils import clamp
 
 QUIT_GAME_BUTTON_COORD = (0, 6)
@@ -21,8 +21,8 @@ class SimonSays:
         self.time = 0
         self.current_step = 0
         self.scene_change_time = 30  # 1 second at 30 fps (adjust this value based on actual frame rate)
-        self.display_delay = 60  # Number of frames to wait between displaying each button (slower display)
-        self.light_on_time = 30  # Time each light stays on during the sequence display
+        self.display_delay = 20  # Number of frames to wait between displaying each button (slower display)
+        self.light_on_time = 20  # Time each light stays on during the sequence display
         self.correct_blink_time = 30  # Time to blink the correct button in blue before the next sequence
 
         self.button_colors = [BLUE, GREEN, RED, YELLOW]
@@ -76,7 +76,12 @@ class SimonSays:
 
             elif self.state == 'display_sequence':
                 # Show the current light in the sequence
-                if self.time < self.light_on_time:
+                if self.current_step == 0:
+                    required_time = self.light_on_time * 2
+                else:
+                    required_time = self.light_on_time
+                
+                if self.time < required_time:
                     self.time += 1
                 else:
                     self.time = 0
@@ -85,8 +90,10 @@ class SimonSays:
                         self.current_step = 0
                         self.state = 'player_turn'
                         return
-
             elif self.state == 'player_turn':
+                if QUIT_GAME_BUTTON_COORD in pressed_buttons:
+                    self.state = "quit"
+                    self.time = 0
                 if len(pressed_buttons) > 0:
                     button_press = assert_single_button_press(pressed_buttons)
 
