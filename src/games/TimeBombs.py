@@ -67,15 +67,15 @@ class TimeBombs:
             for bomb in self.bombs:
                 bomb.update()
             
-            spawn_period = max(1, 3 - self.time // (30 * 20))
+            spawn_period = max(1, 3 - self.time // (30 * 10))
+            n_new_boms = clamp(1, self.time // 30 *60 ,3) 
 
             if self.time % (15 * spawn_period) == 0:
                 possible_new_bomb_coords= set((int(random.random()*5), int(random.random()*7)) for _ in range(10))
-                (row, col)= possible_new_bomb_coords.difference(bomb_coords).pop()
-
-
-                new_bomb = Bomb(row, col, random.choice(["RED", "YELLOW", "BLUE"]))
-                self.bombs.append(new_bomb)
+                for _ in range(n_new_boms):
+                    (row, col)= possible_new_bomb_coords.difference(bomb_coords).pop()
+                    new_bomb = Bomb(row, col, random.choice(["RED", "YELLOW", "BLUE"]))
+                    self.bombs.append(new_bomb)
             
         elif self.state == 'score':
             if self.time >= 30 * 7:
@@ -143,9 +143,6 @@ class TimeBombs:
             board.buttons[(row, col)].set_all_lights(WHITE)
 
         return board
-    
-
-    
 
 class Bomb:
     def __init__(self,row: int, col: int, type: Literal["RED", "BLUE", "YELLOW"]):
@@ -175,9 +172,9 @@ class Bomb:
     def get_lights(self) -> list[Light] | None:
         number_of_lights = math.floor((1-self.progress) * 12)
         lights = []
-        for i in range(number_of_lights):
+        for _ in range(number_of_lights):
             lights.append(self.get_light())
-        for i in range(number_of_lights, 12):
+        for _ in range(number_of_lights, 12):
             lights.append(Light(0, 0, 0))
         return lights
 
@@ -187,8 +184,8 @@ class Bomb:
     def _get_max_time(self) -> int:
         match self.type:
             case "RED":
-                return 100
+                return 50
             case "BLUE":
-                return 120
+                return 100
             case "YELLOW":
-                return 150
+                return 120
