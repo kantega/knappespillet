@@ -1,17 +1,17 @@
+import math
+from enum import Enum
 from typing import Optional
 
 from Board import Board
-from Light import  MAGENTA, YELLOW, GREEN, RED
-from enum import Enum
-
 from games.CatchTheLight import CatchTheLight
-from games.TickTackToe import TickTackToe
-from games.TimeBombs import TimeBombs
+from games.SimonSays import SimonSays
 from games.TapDance import TapDance
 from games.TapTendrils import TapTendrils
-import math
-
+from games.TickTackToe import TickTackToe
+from games.TimeBombs import TimeBombs
+from Light import GREEN, MAGENTA, RED, YELLOW
 from utils import clamp
+
 
 class MENU_STATES(Enum):
     WAITING = "WAITING" # When waiting for games to be selected
@@ -33,6 +33,7 @@ class Menu:
             (0,2): TimeBombs(),
             (0,3): TickTackToe(),
             (0,4): CatchTheLight(),
+            (0,5): SimonSays(),
         }
         self.game_coords = self._get_game_coords()
         self.playing_game = None
