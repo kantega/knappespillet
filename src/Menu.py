@@ -5,6 +5,7 @@ from Light import  MAGENTA, YELLOW, GREEN, RED
 from enum import Enum
 
 from games.TickTackToe import TickTackToe
+from games.SimonSays import SimonSays
 from games.TimeBombs import TimeBombs
 from games.TapDance import TapDance
 from games.TapTendrils import TapTendrils
@@ -31,6 +32,7 @@ class Menu:
             (0,1): TapTendrils(),
             (0,2): TimeBombs(),
             (0,3): TickTackToe(),
+            (0,4): SimonSays(),
         }
         self.game_coords = self._get_game_coords()
         self.playing_game = None
