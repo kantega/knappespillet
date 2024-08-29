@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Optional
 
 from Board import Board
+from games.ConnectFour import ConnectFour
 from games.CatchTheLight import CatchTheLight
 from games.SimonSays import SimonSays
 from games.TapDance import TapDance
@@ -34,6 +35,7 @@ class Menu:
             (0,3): TickTackToe(),
             (0,4): CatchTheLight(),
             (0,5): SimonSays(),
+            (0,6): ConnectFour(),
         }
         self.game_coords = self._get_game_coords()
         self.playing_game = None
