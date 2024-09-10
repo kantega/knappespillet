@@ -8,6 +8,8 @@ KEY_PRESS_TIMEOUT = 12
 
 QUIT_GAME_BUTTON_COORD = (0,6)
 
+ROUND_INCREMENT = 2
+
 GAME_STATE_MENU = "menu"
 GAME_STATE_QUITTING = "quit"
 GAME_STATE_PLAYING = "playing"
@@ -27,7 +29,8 @@ class PatternMemory:
 
 
     def populate_random(self, current_round):
-        n = current_round + 4
+        n = (current_round * ROUND_INCREMENT) + 4
+        
         # Get all possible (row, col) positions on the board
         all_positions = [(row, col) for row in range(self.num_rows) for col in range(self.num_cols)]
         
