@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Optional
 
 from Board import Board
+from games.PatternMemory import PatternMemory
 from games.ConnectFour import ConnectFour
 from games.CatchTheLight import CatchTheLight
 from games.SimonSays import SimonSays
@@ -38,6 +39,7 @@ class Menu:
             (0,5): SimonSays(),
             (0,6): ConnectFour(),
             (1,0): Python(),
+            (1,1): PatternMemory(),
         }
         self.game_coords = self._get_game_coords()
         self.playing_game = None

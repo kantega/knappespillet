@@ -30,7 +30,7 @@ class Light:
             max(self.blue, other.blue),
         )
 
-
+BLACK = Light(0, 0, 0)
 RED = Light(1, 0, 0)
 GREEN = Light(0, 1, 0)
 BLUE = Light(0, 0, 1)
