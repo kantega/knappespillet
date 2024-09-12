@@ -11,7 +11,7 @@ QUIT_GAME_BUTTON_COORD = (0,6)
 SHOW_LAST_SCORE_BUTTON_COORD = (4,6)
 SHOW_HIGH_SCORE_BUTTON_COORD = (4,0)
 
-ROUND_INCREMENT = 2
+ROUND_INCREMENT = 1
 
 GAME_STATE_MENU = "menu"
 GAME_STATE_QUITTING = "quit"
@@ -278,7 +278,7 @@ class TaskAnimation:
     def __init__(self, task):
         self.is_done = False
         self.time = 0
-        self.speed = 10 # number of frames per light
+        self.speed = 15 # number of frames per light
         self.task = task # list of (row, col) touples
         
     def update(self):
@@ -287,7 +287,7 @@ class TaskAnimation:
         
         self.time += 1
         
-        if self.time >= len(self.task) * self.speed + self.speed * 3:
+        if self.time >= len(self.task) * self.speed + self.speed * 4:
             self.is_done = True
 
 
