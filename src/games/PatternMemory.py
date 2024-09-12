@@ -1,21 +1,26 @@
 import math
 import random
 from Board import Board
-from Light import BLACK, CYAN, MAGENTA, YELLOW, GREEN, RED
+from Light import BLACK, CYAN, MAGENTA, YELLOW, GREEN, RED, BLUE
 from utils import clamp, rotate
 
-KEY_PRESS_TIMEOUT = 12
+KEY_PRESS_TIMEOUT = 10 # frames
+SHOW_SCORE_DURATION = 180 # frames
 
 QUIT_GAME_BUTTON_COORD = (0,6)
+SHOW_LAST_SCORE_BUTTON_COORD = (4,6)
+SHOW_HIGH_SCORE_BUTTON_COORD = (4,0)
 
 ROUND_INCREMENT = 2
 
 GAME_STATE_MENU = "menu"
 GAME_STATE_QUITTING = "quit"
 GAME_STATE_PLAYING = "playing"
-GAME_STATE_ANIMATING = "animating"
-GAME_STATE_GAME_OVER = "game_over"
-
+GAME_STATE_TRANSITION_ANIMATION = "animating transition"
+GAME_STATE_TASK_ANIMATION = "animating task"
+GAME_STATE_GAME_OVER = "game over"
+GAME_STATE_LAST_SCORE = "last score"
+GAME_STATE_HIGH_SCORE = "high score"
 
 class PatternMemory:
     def __init__(self):
@@ -24,6 +29,9 @@ class PatternMemory:
 
         self.num_rows = 5
         self.num_cols = 7
+
+        self.high_score = 0
+        self.last_score = 0
         
         self.reset_everything()
 
@@ -72,7 +80,7 @@ class PatternMemory:
         return True
 
     def start_transition_animation(self, next_game_state):
-        self.game_state = GAME_STATE_ANIMATING
+        self.game_state = GAME_STATE_TRANSITION_ANIMATION
         self.animation = TransitionAnimation()
         self.next_game_state = next_game_state
 
@@ -85,6 +93,14 @@ class PatternMemory:
                 if QUIT_GAME_BUTTON_COORD in pressed_buttons:
                     self.game_state = GAME_STATE_QUITTING
                     self.time = 0
+
+                elif SHOW_HIGH_SCORE_BUTTON_COORD in pressed_buttons:
+                    self.game_state = GAME_STATE_HIGH_SCORE
+                    self.time = 0
+
+                elif SHOW_LAST_SCORE_BUTTON_COORD in pressed_buttons:
+                    self.game_state = GAME_STATE_LAST_SCORE
+                    self.time = 0
                 
                 elif len(pressed_buttons) > 0:
                     self.time = 0
@@ -92,7 +108,7 @@ class PatternMemory:
 
                     self.populate_random(current_round=self.current_round)
 
-                    self.start_transition_animation(GAME_STATE_ANIMATING)
+                    self.start_transition_animation(GAME_STATE_TASK_ANIMATION)
                     return
         
 
@@ -108,21 +124,32 @@ class PatternMemory:
                     return go_to_main_menu()
 
         elif self.game_state == GAME_STATE_GAME_OVER:
-            if self.time > 90:
+            if self.time > SHOW_SCORE_DURATION:
                 self.reset_everything()
                 return
             
+        elif self.game_state == GAME_STATE_LAST_SCORE or self.game_state == GAME_STATE_HIGH_SCORE:
+            if self.time > SHOW_SCORE_DURATION:
+                self.game_state = GAME_STATE_MENU
+                
+            
 
-        elif self.game_state == GAME_STATE_ANIMATING:
+        elif self.game_state == GAME_STATE_TRANSITION_ANIMATION:
             self.animation.update()
             if self.animation.check_if_done():
-                if self.next_game_state == GAME_STATE_ANIMATING:
-                    # This occurs when the next animation to play should be the task animation
-                    self.animation = TaskAnimation(self.task_board)
+                if self.next_game_state == GAME_STATE_TASK_ANIMATION:
                     self.next_game_state = GAME_STATE_PLAYING
+                    self.game_state = GAME_STATE_TASK_ANIMATION
+                    self.animation = TaskAnimation(self.task_board)
                 else:
                     self.game_state = self.next_game_state
                     self.animation = None
+
+        elif self.game_state == GAME_STATE_TASK_ANIMATION:
+            self.animation.update()
+            if self.animation.check_if_done():
+                self.start_transition_animation(GAME_STATE_PLAYING)
+
 
         elif self.game_state == GAME_STATE_PLAYING:
             for (row, col) in pressed_buttons:
@@ -134,7 +161,8 @@ class PatternMemory:
                 wrong_input = self.check_for_wrong_inputs()
                 if wrong_input:
                     self.time = 0
-                    self.score = self.score - 1 # Last score was wrong
+                    self.last_score = self.score - 1 # Remove the point from the incorrect button press  
+                    self.high_score = self.last_score if self.last_score > self.high_score else self.high_score
                     self.start_transition_animation(GAME_STATE_GAME_OVER)
                 
                 correct_pattern = self.check_if_correct_pattern()
@@ -143,10 +171,9 @@ class PatternMemory:
                     self.input_board = []
                     self.populate_random(current_round=self.current_round)
 
-                    self.start_transition_animation(GAME_STATE_ANIMATING)
+                    self.start_transition_animation(GAME_STATE_TASK_ANIMATION)
                 
                 
-        
         self.time += 1
         
 
@@ -162,6 +189,8 @@ class PatternMemory:
             board.buttons[(1, 4)].set_all_lights(GREEN)
             board.buttons[(3, 4)].set_all_lights(GREEN)
             board.buttons[QUIT_GAME_BUTTON_COORD].set_all_lights(RED)
+            board.buttons[SHOW_HIGH_SCORE_BUTTON_COORD].set_all_lights(BLUE)
+            board.buttons[SHOW_LAST_SCORE_BUTTON_COORD].set_all_lights(YELLOW)
 
         elif self.game_state == GAME_STATE_QUITTING:
             button = board.buttons[QUIT_GAME_BUTTON_COORD]
@@ -170,14 +199,17 @@ class PatternMemory:
             button.set_n_lights(number_of_lights, YELLOW)
             return board            
         
-        elif self.game_state == GAME_STATE_ANIMATING:
+        elif self.game_state == GAME_STATE_TRANSITION_ANIMATION or self.game_state == GAME_STATE_TASK_ANIMATION:
             for row in range(5):
                 for col in range(7):
                     board.buttons[(row, col)].set_all_lights(self.animation.get_light_color(row, col))
 
-        elif self.game_state == GAME_STATE_GAME_OVER:
-            board.show_two_digit_number(self.score, CYAN)
-    
+        elif self.game_state == GAME_STATE_GAME_OVER or self.game_state == GAME_STATE_LAST_SCORE:
+            board.show_two_digit_number(self.last_score, CYAN)
+
+
+        elif self.game_state == GAME_STATE_HIGH_SCORE:
+            board.show_two_digit_number(self.high_score, CYAN)
             
         elif self.game_state == GAME_STATE_PLAYING:
             for (row, col) in self.input_board:
