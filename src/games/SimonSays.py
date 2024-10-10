@@ -3,7 +3,6 @@ import random
 from typing import List
 
 from Board import Board
-from HighScoreDisplay import display_high_scores
 from HighScoreManager import read_high_scores, write_high_score
 from Light import BLUE, GREEN, RED, WHITE, YELLOW, Light
 from utils import clamp
@@ -133,7 +132,6 @@ class SimonSays:
                     # Display high scores
                     high_scores = read_high_scores(self.file_name)
                     print(f"High scores: {high_scores}")
-                    display_high_scores(high_scores) 
                     self.state = 'waiting'
                     self.time = 0
                     self.sequence.clear()
