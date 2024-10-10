@@ -10,7 +10,7 @@ import pygame
 
 from Board import Board
 from interrupt import is_interrupted, handle_interrupts
-from cli import select_game
+from Menu import Menu
 
 # Position and rotation
 LIGHT_MAPPING = [
@@ -145,4 +145,4 @@ def run(game, debug):
 
 
 if __name__ == "__main__":
-    run(select_game(), False)
+    run(Menu(), False)

@@ -25,6 +25,11 @@ class MENU_STATES(Enum):
 
 
 class Menu:
+    def get_image(self):
+        if self.state == MENU_STATES.PLAYING:
+            return self.playing_game.get_image()
+        return "img2.png"
+
     """ 
     Main menu: A game that loads other games.
     Select the game you want to play by holding one of the buttons
