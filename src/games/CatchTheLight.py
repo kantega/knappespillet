@@ -2,8 +2,8 @@ import math
 from random import randint
 
 from Board import Board
-from Light import Light, WHITE, CYAN, MAGENTA, YELLOW, GREEN, RED
-from utils import clamp, rotate
+from Light import WHITE, CYAN, MAGENTA, YELLOW, GREEN, RED
+from utils import clamp 
 
 QUIT_GAME_BUTTON_COORD = (0,6)
 

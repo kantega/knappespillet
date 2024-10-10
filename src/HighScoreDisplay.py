@@ -33,8 +33,17 @@ class HighScoreDisplay(QWidget):
         # Set the layout
         self.setLayout(layout)
         self.setGeometry(100, 100, 300, 300)
+        self.showMaximized()
 
 def display_high_scores(high_scores):
     app = QApplication(sys.argv)
     window = HighScoreDisplay(high_scores)
+    print("Displaying high scores")
     window.show()
+    sys.exit(app.exec_())
+
+
+    
+if __name__ == "__main__":
+    high_scores = ["100", "90", "80", "70", "60", "50", "40", "30", "20", "10"]
+    display_high_scores(high_scores)
