@@ -9,6 +9,8 @@ from utils import clamp
 QUIT_GAME_BUTTON_COORD = (0,6)
 
 class TapTendrils:
+    def get_image(self):
+        return "img1.png"
     def __init__(self):
         self.name = "TapTendrils"
         self.desc = "Tap the tendrils to prevent them from reaching the bottom. You have a guard in each column."

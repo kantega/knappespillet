@@ -12,6 +12,8 @@ QUIT_GAME_BUTTON_COORD = (0, 6)
 START_GAME_BUTTON_COORD = (2, 3)  # Middle button in a 5x7 grid
 
 class SimonSays:
+    def get_image(self):
+        return "img1.png"
     def __init__(self):
         self.name = "Simon Says"
         self.desc = "Repeat the sequence of lights!"

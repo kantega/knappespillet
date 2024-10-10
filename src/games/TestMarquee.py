@@ -3,6 +3,8 @@ from Light import GREEN
 
 
 class TestMarquee:
+    def get_image(self):
+        return "img1.png"
     def __init__(self):
         self.name = "[Test] Marquee"
         self.desc = "Scolling text"

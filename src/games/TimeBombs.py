@@ -9,6 +9,8 @@ from utils import clamp
 QUIT_GAME_BUTTON_COORD = (0,6)
 
 class TimeBombs:
+    def get_image(self):
+        return "img1.png"
     def __init__(self):
         self.name = "TimeBombs"
         self.desc = "Click all the rings before their time goes out"

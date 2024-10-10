@@ -16,6 +16,8 @@ class Player:
 QUIT_GAME_BUTTON_COORD = (0,6)
 
 class TickTackToe:
+    def get_image(self):
+        return "img1.png"
     def __init__(self):
         self.name = "TickTackToe"
         self.desc = "The classic Two player game"

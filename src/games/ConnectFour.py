@@ -17,6 +17,8 @@ GAME_STATE_P2_WIN = "winner2"
 
 
 class ConnectFour:
+    def get_image(self):
+        return "img1.png"
     def __init__(self):
         self.name = "ConnectFour"
         self.desc = "Get four in a row. 2 player game."

@@ -3,6 +3,8 @@ from Light import RED, GREEN, BLUE, WHITE
 
 
 class TestAlignment:
+    def get_image(self):
+        return "img1.png"
     def __init__(self):
         self.name = "[Test] Alignment"
         self.desc = "Test pattern to adjust alignment. Should have red top, green sides and blue bottom."

@@ -12,6 +12,8 @@ UP = "up"
 DOWN = "down"
 
 class Python:
+    def get_image(self):
+        return "img1.png"
     def __init__(self):
         self.name = "Python"
         self.desc = "It's snake, but in python -_-'"

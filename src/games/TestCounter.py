@@ -3,6 +3,8 @@ from Light import WHITE
 
 
 class TestCounter:
+    def get_image(self):
+        return "img1.png"
     def __init__(self):
         self.name = "[Test] Counter"
         self.desc = "A two digit counter"

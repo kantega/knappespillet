@@ -18,7 +18,6 @@ def select_game() -> any:
         TestAlignment(),
         TestCounter(),
         TestMarquee(),
-
     ]
     options = [f"{game.name} - {game.desc}" for game in games]
     index = select("Select game:", options)

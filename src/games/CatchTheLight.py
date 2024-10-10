@@ -96,3 +96,6 @@ class CatchTheLight:
             board.buttons[(row, col)].set_all_lights(WHITE)
 
         return board
+    
+    def get_image(self):
+        return "img1.png"

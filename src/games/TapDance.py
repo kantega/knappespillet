@@ -7,6 +7,8 @@ from utils import clamp, rotate
 
 QUIT_GAME_BUTTON_COORD = (0,6)
 class TapDance:
+    def get_image(self):
+        return "img1.png"
     def __init__(self):
         self.name = "TapDance"
         self.desc = "Keep at least one button pushed while avoiding the lights"

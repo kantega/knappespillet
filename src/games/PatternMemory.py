@@ -23,6 +23,8 @@ GAME_STATE_LAST_SCORE = "last score"
 GAME_STATE_HIGH_SCORE = "high score"
 
 class PatternMemory:
+    def get_image(self):
+        return "img1.png"
     def __init__(self):
         self.name = "Pattern Memory"
         self.desc = "Memorize the pattern."
