@@ -155,23 +155,26 @@ class PatternMemory:
             for (row, col) in pressed_buttons:
                 if not self.keyPressTimeout():
                     self.lastKeyPress = self.time
-                    self.input_board.append((row, col))
-                    self.score = self.score + 1
+                    if ((row, col) not in self.input_board):
+                        self.input_board.append((row, col))
+                        self.score = self.score + 1
+                    else:
+                        break
 
-                wrong_input = self.check_for_wrong_inputs()
-                if wrong_input:
-                    self.time = 0
-                    self.last_score = self.score - 1 # Remove the point from the incorrect button press  
-                    self.high_score = self.last_score if self.last_score > self.high_score else self.high_score
-                    self.start_transition_animation(GAME_STATE_GAME_OVER)
-                
-                correct_pattern = self.check_if_correct_pattern()
-                if correct_pattern:
-                    self.current_round = self.current_round + 1
-                    self.input_board = []
-                    self.populate_random(current_round=self.current_round)
+                    wrong_input = self.check_for_wrong_inputs()
+                    if wrong_input:
+                        self.time = 0
+                        self.last_score = self.score - 1 # Remove the point from the incorrect button press  
+                        self.high_score = self.last_score if self.last_score > self.high_score else self.high_score
+                        self.start_transition_animation(GAME_STATE_GAME_OVER)
+                    
+                    correct_pattern = self.check_if_correct_pattern()
+                    if correct_pattern:
+                        self.current_round = self.current_round + 1
+                        self.input_board = []
+                        self.populate_random(current_round=self.current_round)
 
-                    self.start_transition_animation(GAME_STATE_TASK_ANIMATION)
+                        self.start_transition_animation(GAME_STATE_TASK_ANIMATION)
                 
                 
         self.time += 1
