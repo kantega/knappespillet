@@ -1,24 +1,17 @@
 import pygame
 from pygame import Surface, Vector2, Color
-from pygame.freetype import Font, SysFont
+from pygame.freetype import Font
 from pygame.time import Clock
 
 from Board import Board
 from Button import Button
+from Controller import Controller
 from Light import Light
-from cli import select_game, select
 from interrupt import is_interrupted, handle_interrupts
 
 KEYBOARD_LAYOUTS = {
-    "querty-top": [
-        ["1", "2", "3", "4", "5", "6", "7"],
-        ["q", "w", "e", "r", "t", "y", "u"],
-        ["a", "s", "d", "f", "g", "h", "j"],
-        ["z", "x", "c", "v", "b", "n", "m"],
-        [None, None, None, None, None, None, None],
-    ],
     "qwerty": [
-        [None, None, None, None, None, None, None],
+        ["1", "2", "3", "4", "5", "6", "7"],
         ["q", "w", "e", "r", "t", "y", "u"],
         ["a", "s", "d", "f", "g", "h", "j"],
         ["z", "x", "c", "v", "b", "n", "m"],
@@ -32,7 +25,7 @@ KEYBOARD_LAYOUTS = {
         [None, None, None, None, None, None, None],
     ],
     "colemak": [
-        [None, None, None, None, None, None, None],
+        ["1", "2", "3", "4", "5", "6", "7"],
         ["q", "w", "f", "p", "g", "j", "u"],
         ["a", "r", "s", "t", "d", "h", "n"],
         ["z", "x", "c", "v", "b", "k", "m"],
@@ -49,7 +42,7 @@ KEYBOARD_LAYOUTS = {
 
 
 def draw_board(
-    surface: Surface, font: Font, keyboard_layout: list[list[str]], board: Board
+        surface: Surface, font: Font, keyboard_layout: list[list[str]], board: Board
 ):
     surface.fill((60, 20, 60))
     for row in range(board.num_rows):
@@ -61,7 +54,7 @@ def draw_board(
 
 
 def draw_button(
-    surface: Surface, font: Font, center: Vector2, key_char: str, button: Button
+        surface: Surface, font: Font, center: Vector2, key_char: str, button: Button
 ):
     average_light = Light(0, 0, 0)
     for light in button.lights:
@@ -104,13 +97,18 @@ def get_pressed_buttons(keyboard_layout: list[list[str]]) -> set[(int, int)]:
     return pressed_buttons
 
 
-def emulate(game, keyboard_layout):
+def emulate(keyboard_layout):
     pygame.init()
-    screen = pygame.display.set_mode(size=(800, 600), vsync=1)
-    pygame.display.set_caption(game.name)
-    font = SysFont(name="Monospace", size=11)
+    menu_window = pygame.Window(title="Menu", size=(640, 360), position=(80, 0))
+    menu_surface = menu_window.get_surface()
+    board_window = pygame.Window(title="Board", size=(800, 600), position=(0, 440))
+    board_surface = board_window.get_surface()
+
+    font = Font(file="src/fonts/Space_Mono/SpaceMono-Regular.ttf", size=12)
     clock = Clock()
     handle_interrupts()
+
+    controller = Controller()
 
     running = True
     while running:
@@ -118,25 +116,43 @@ def emulate(game, keyboard_layout):
             running = False
 
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.WINDOWCLOSE:
                 running = False
 
         pressed_buttons = get_pressed_buttons(keyboard_layout)
-        game.update(pressed_buttons)
-        board = game.render(pressed_buttons)
-        draw_board(screen, font, keyboard_layout, board)
+        controller.update(pressed_buttons)
+        board = controller.render_board(pressed_buttons)
+        menu = controller.render_menu(pressed_buttons)
 
-        pygame.display.flip()
+        draw_board(board_surface, font, keyboard_layout, board)
+
+        menu_surface.fill((0, 0, 0))
+        menu_surface.blit(pygame.transform.scale_by(menu, 0.5))
+
+        menu_window.flip()
+        board_window.flip()
         clock.tick(30)
 
     pygame.quit()
 
 
-def select_keyboard_layout() -> str:
+def select(header: str, options: list[str]) -> int:
+    while True:
+        print()
+        print(header)
+        for index, option in enumerate(options):
+            print(f"{index + 1}. {option}")
+        print()
+        s = input("Enter a number: ")
+        if s.isdigit() and 1 <= int(s) <= len(options):
+            return int(s) - 1
+
+
+def select_keyboard_layout():
     options = list(KEYBOARD_LAYOUTS)
     index = select("Select keyboard layout:", options)
     return KEYBOARD_LAYOUTS[options[index]]
 
 
 if __name__ == "__main__":
-    emulate(select_game(), select_keyboard_layout())
+    emulate(select_keyboard_layout())

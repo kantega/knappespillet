@@ -1,16 +1,12 @@
-import math
 from random import randint
 
 from Board import Board
+from Game import Game, GameInfo, ExitCommand
 from Light import Light, WHITE, CYAN, MAGENTA, YELLOW, GREEN, RED
-from utils import clamp, rotate
+from utils import rotate
 
-QUIT_GAME_BUTTON_COORD = (0,6)
-class TapDance:
+class TapDance(Game):
     def __init__(self):
-        self.name = "TapDance"
-        self.desc = "Keep at least one button pushed while avoiding the lights"
-
         self.state = 'waiting'
         self.time = 0
         self.score = 0
@@ -18,30 +14,22 @@ class TapDance:
         self.next = ['up', 'down', 'right', 'left']
         self.fail_buttons = []
 
-    def update(self, pressed_buttons: set[(int, int)],  **kwargs):
+    def info(self) -> GameInfo:
+        return GameInfo(
+            name="TapDance",
+            description="Keep at least one button pushed while avoiding the lights",
+            image_path="src/images/tux.png",
+        )
+
+    def update(self, pressed_buttons: set[tuple[int, int]]) -> list:
         if self.state == 'waiting':
-            if QUIT_GAME_BUTTON_COORD in pressed_buttons and "go_to_main_menu" in kwargs:
-                self.state = "quit"
-                self.time = 0
             if (2, 2) in pressed_buttons and (2, 4) in pressed_buttons:
                 self.state = 'playing'
                 self.time = 0
                 self.waves = []
                 self.next = ['up', 'down', 'right', 'left']
                 self.fail_buttons = []
-                return
-        
-        elif self.state == "quit":
-            if QUIT_GAME_BUTTON_COORD not in pressed_buttons:
-                self.state = "waiting"
-                self.time = 0
-                return
-
-            if self.time > 60:
-                go_to_main_menu = kwargs["go_to_main_menu"]
-                return go_to_main_menu()
-
-            self.time += 1
+                return []
 
         elif self.state == 'playing':
 
@@ -50,7 +38,7 @@ class TapDance:
                 self.state = 'score'
                 self.score = self.time // 30
                 self.time = 0
-                return
+                return []
 
             # Must not touch wave
             for row in range(5):
@@ -63,7 +51,7 @@ class TapDance:
                 self.state = 'score'
                 self.score = self.time // 30
                 self.time = 0
-                return
+                return []
 
             # Update all waves and keep relevant ones
             if self.time % 2 == 0:
@@ -77,20 +65,19 @@ class TapDance:
                 self.waves.append(Wave(self.next[0]))
 
         elif self.state == 'score':
-            if self.time >= 30 * 7:
+            if self.time >= 30 * 2:
                 self.state = 'waiting'
-                return
+                return [ExitCommand(self.score)]
 
         self.time += 1
+        return []
 
-    def render(self, pressed_buttons: set[(int, int)]) -> Board:
+    def render(self, pressed_buttons: set[tuple[int, int]]) -> Board:
         board = Board()
 
         if self.state == 'waiting':
             board.buttons[(2, 2)].set_all_lights(GREEN)
             board.buttons[(2, 4)].set_all_lights(GREEN)
-            board.buttons[QUIT_GAME_BUTTON_COORD].set_all_lights(RED)
-
 
         if self.state == 'playing':
             for row in range(board.num_rows):
@@ -125,25 +112,6 @@ class TapDance:
 
             for (row, col) in self.fail_buttons:
                 board.buttons[(row, col)].set_all_lights(RED * play_intensity)
-
-            if self.time < 30 * 2:
-                number_intensity = 0
-            elif self.time < 30 * 6:
-                number_intensity = 1
-            elif self.time < 30 * 7:
-                number_intensity = 1 - (self.time - 30 * 6) / 30
-            else:
-                number_intensity = 0
-
-            if self.time >= 60:
-                board.show_two_digit_number(self.score, CYAN * number_intensity)
-
-        elif self.state == "quit":
-            button = board.buttons[QUIT_GAME_BUTTON_COORD]
-            hold_progress = clamp(1, self.time, 60) / 60
-            number_of_lights = math.ceil(hold_progress * button.num_lights)
-            button.set_n_lights(number_of_lights, YELLOW)
-            return board
 
         for (row, col) in pressed_buttons:
             board.buttons[(row, col)].set_all_lights(WHITE)
@@ -189,6 +157,7 @@ class Wave:
             return YELLOW
         if self.direction == 'up':
             return Light(0.66, 0.66, 0.66)
+        raise RuntimeError(f"Invalid direction {self.direction}")
 
     def get_lights(self, row: int, col: int) -> list[Light] | None:
         if self.direction == 'right':

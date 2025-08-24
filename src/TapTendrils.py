@@ -1,49 +1,36 @@
-import math
 from random import randint
 
 from Board import Board
-from Light import RED, YELLOW, Light, CYAN, GREEN, WHITE
+from Game import Game, ExitCommand, GameInfo
+from Light import Light, CYAN, GREEN, WHITE
 from utils import clamp
 
 
-QUIT_GAME_BUTTON_COORD = (0,6)
+class TapTendrils(Game):
 
-class TapTendrils:
     def __init__(self):
-        self.name = "TapTendrils"
-        self.desc = "Tap the tendrils to prevent them from reaching the bottom. You have a guard in each column."
-
         self.state = 'waiting'
         self.time = 0
         self.score = 0
         self.tendrils = [Tendril(i) for i in range(7)]
         self.lives = [True for _ in range(7)]
 
-    def update(self, pressed_buttons: set[(int, int)], **kwargs):
-        if self.state == 'waiting':
-            if QUIT_GAME_BUTTON_COORD in pressed_buttons:
-                self.state = "quit"
-                self.time = 0
+    def info(self) -> GameInfo:
+        return GameInfo(
+            name="TapTendrils",
+            description="Tap the tendrils to prevent them from reaching the bottom. You have a guard in each column.",
+            image_path="src/images/tux.png",
+        )
 
+    def update(self, pressed_buttons: set[tuple[int, int]]) -> list:
+        if self.state == 'waiting':
             if (2, 3) in pressed_buttons:
                 self.state = 'playing'
                 self.time = 0
                 self.score = 0
                 self.tendrils = [Tendril(i) for i in range(7)]
                 self.lives = [True for _ in range(7)]
-                return
-        
-        elif self.state == "quit":
-            if QUIT_GAME_BUTTON_COORD not in pressed_buttons:
-                self.state = "waiting"
-                self.time = 0
-                return
-
-            if self.time > 60:
-                go_to_main_menu = kwargs["go_to_main_menu"]
-                return go_to_main_menu()
-
-            self.time += 1
+                return []
 
         elif self.state == 'playing':
             # Update tendrils
@@ -79,22 +66,21 @@ class TapTendrils:
                         self.state = 'score'
                         self.score = self.time // 30
                         self.time = 0
-                        return
+                        return []
 
         elif self.state == 'score':
-            if self.time >= 30 * 7:
+            if self.time >= 30 * 2:
                 self.state = 'waiting'
-                return
-
+                return [ExitCommand(self.score)]
 
         self.time += 1
+        return []
 
-    def render(self, pressed_buttons: set[(int, int)]) -> Board:
+    def render(self, pressed_buttons: set[tuple[int, int]]) -> Board:
         board = Board()
 
         if self.state == 'waiting':
-            board.buttons[(2,3)].set_all_lights(GREEN)
-            board.buttons[QUIT_GAME_BUTTON_COORD].set_all_lights(RED)
+            board.buttons[(2, 3)].set_all_lights(GREEN)
 
         if self.state == 'playing':
             if self.time < 30:
@@ -139,25 +125,6 @@ class TapTendrils:
                         if lights is not None:
                             for i in range(12):
                                 button.lights[i] = (button.lights[i] + lights[i]) * play_intensity
-
-            if self.time < 30 * 2:
-                number_intensity = 0
-            elif self.time < 30 * 6:
-                number_intensity = 1
-            elif self.time < 30 * 7:
-                number_intensity = 1 - (self.time - 30 * 6) / 30
-            else:
-                number_intensity = 0
-
-            if self.time >= 60:
-                board.show_two_digit_number(self.score, CYAN * number_intensity)
-
-        elif self.state == "quit":
-            button = board.buttons[QUIT_GAME_BUTTON_COORD]
-            hold_progress = clamp(1, self.time, 60) / 60
-            number_of_lights = math.ceil(hold_progress * button.num_lights)
-            button.set_n_lights(number_of_lights, YELLOW)
-            return board
 
         for (row, col) in pressed_buttons:
             board.buttons[(row, col)].set_all_lights(WHITE)
