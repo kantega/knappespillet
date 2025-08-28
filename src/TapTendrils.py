@@ -2,14 +2,14 @@ from random import randint
 
 from Board import Board
 from Game import Game, ExitCommand, GameInfo
-from Light import Light, CYAN, GREEN, WHITE
+from Light import Light, GREEN, WHITE
 from utils import clamp
 
 
 class TapTendrils(Game):
 
     def __init__(self):
-        self.state = 'waiting'
+        self.state = 'playing'
         self.time = 0
         self.score = 0
         self.tendrils = [Tendril(i) for i in range(7)]
@@ -20,19 +20,11 @@ class TapTendrils(Game):
             name="TapTendrils",
             description="Tap the tendrils to prevent them from reaching the bottom. You have a guard in each column.",
             image_path="src/images/tux.png",
+            creator="Per Thomas",
         )
 
     def update(self, pressed_buttons: set[tuple[int, int]]) -> list:
-        if self.state == 'waiting':
-            if (2, 3) in pressed_buttons:
-                self.state = 'playing'
-                self.time = 0
-                self.score = 0
-                self.tendrils = [Tendril(i) for i in range(7)]
-                self.lives = [True for _ in range(7)]
-                return []
-
-        elif self.state == 'playing':
+        if self.state == 'playing':
             # Update tendrils
             for tendril in self.tendrils:
                 tendril.update()
@@ -70,17 +62,13 @@ class TapTendrils(Game):
 
         elif self.state == 'score':
             if self.time >= 30 * 2:
-                self.state = 'waiting'
-                return [ExitCommand(self.score)]
+                return [ExitCommand(score=self.score)]
 
         self.time += 1
         return []
 
     def render(self, pressed_buttons: set[tuple[int, int]]) -> Board:
         board = Board()
-
-        if self.state == 'waiting':
-            board.buttons[(2, 3)].set_all_lights(GREEN)
 
         if self.state == 'playing':
             if self.time < 30:

@@ -3,6 +3,7 @@ from pygame import Surface
 from pygame.freetype import Font
 
 from Board import Board
+from CatchTheLight import CatchTheLight
 from Game import Game, ExitCommand
 from Light import GREEN, YELLOW, WHITE, CYAN, BLACK
 from TapDance import TapDance
@@ -19,6 +20,7 @@ class Controller:
         self.games: list[Game] = [
             TapDance(),
             TapTendrils(),
+            CatchTheLight(),
         ]
         self.index: int = 0
         self.time: int = 0
@@ -92,6 +94,6 @@ class Controller:
         self.large_font.render_to(surface, dest=(20, 20), text=game_info.name, fgcolor=(255, 0, 0))
         self.small_font.render_to(surface, dest=(20, 80), text=game_info.description, fgcolor=(0, 255, 0))
 
-        surface.blit(self.image, dest=(100,200))
+        surface.blit(self.image, dest=(100, 200))
 
         return surface

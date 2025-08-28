@@ -2,12 +2,13 @@ from random import randint
 
 from Board import Board
 from Game import Game, GameInfo, ExitCommand
-from Light import Light, WHITE, CYAN, MAGENTA, YELLOW, GREEN, RED
+from Light import Light, WHITE, CYAN, MAGENTA, YELLOW, RED
 from utils import rotate
+
 
 class TapDance(Game):
     def __init__(self):
-        self.state = 'waiting'
+        self.state = 'playing'
         self.time = 0
         self.score = 0
         self.waves = []
@@ -19,19 +20,11 @@ class TapDance(Game):
             name="TapDance",
             description="Keep at least one button pushed while avoiding the lights",
             image_path="src/images/tux.png",
+            creator="Per Thomas",
         )
 
     def update(self, pressed_buttons: set[tuple[int, int]]) -> list:
-        if self.state == 'waiting':
-            if (2, 2) in pressed_buttons and (2, 4) in pressed_buttons:
-                self.state = 'playing'
-                self.time = 0
-                self.waves = []
-                self.next = ['up', 'down', 'right', 'left']
-                self.fail_buttons = []
-                return []
-
-        elif self.state == 'playing':
+        if self.state == 'playing':
 
             # Must hold at least one button
             if len(pressed_buttons) == 0:
@@ -66,18 +59,13 @@ class TapDance(Game):
 
         elif self.state == 'score':
             if self.time >= 30 * 2:
-                self.state = 'waiting'
-                return [ExitCommand(self.score)]
+                return [ExitCommand(score=self.score)]
 
         self.time += 1
         return []
 
     def render(self, pressed_buttons: set[tuple[int, int]]) -> Board:
         board = Board()
-
-        if self.state == 'waiting':
-            board.buttons[(2, 2)].set_all_lights(GREEN)
-            board.buttons[(2, 4)].set_all_lights(GREEN)
 
         if self.state == 'playing':
             for row in range(board.num_rows):
@@ -172,6 +160,7 @@ class Wave:
         if self.direction == 'up':
             if self.time // 12 == 5 - row - 1:
                 return rotate(self.light_pattern(self.time % 12), 6)
+        return None
 
     def light_pattern(self, n):
         half = [self.get_light() if i < n < i + 6 else Light(0, 0, 0) for i in range(6)]

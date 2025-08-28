@@ -9,10 +9,11 @@ class ExitCommand:
 
 
 class GameInfo:
-    def __init__(self, name: str, description: str, image_path: str):
+    def __init__(self, name: str, description: str, image_path: str, creator: str):
         self.name = name
         self.description = description
         self.image_path = image_path
+        self.creator = creator
 
 
 class Game(ABC):

@@ -99,7 +99,7 @@ def get_pressed_buttons(keyboard_layout: list[list[str]]) -> set[(int, int)]:
 
 def emulate(keyboard_layout):
     pygame.init()
-    menu_window = pygame.Window(title="Menu", size=(640, 360), position=(80, 0))
+    menu_window = pygame.Window(title="Menu", size=(640, 360), position=(80, 40))
     menu_surface = menu_window.get_surface()
     board_window = pygame.Window(title="Board", size=(800, 600), position=(0, 440))
     board_surface = board_window.get_surface()
