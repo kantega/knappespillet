@@ -10,6 +10,7 @@ from Game import Game, ExitCommand
 from Light import GREEN, YELLOW, WHITE, CYAN, BLACK
 from TapDance import TapDance
 from TapTendrils import TapTendrils
+from TickTackToe import TickTackToe
 from TimeBombs import TimeBombs
 
 
@@ -26,6 +27,7 @@ class Controller:
             CatchTheLight(),
             TimeBombs(),
             ConnectFour(),
+            TickTackToe(),
         ]
         self.index: int = 0
         self.time: int = 0
