@@ -5,6 +5,7 @@ from pygame.freetype import Font
 
 from Board import Board
 from CatchTheLight import CatchTheLight
+from ConnectFour import ConnectFour
 from Game import Game, ExitCommand
 from Light import GREEN, YELLOW, WHITE, CYAN, BLACK
 from TapDance import TapDance
@@ -24,6 +25,7 @@ class Controller:
             TapTendrils(),
             CatchTheLight(),
             TimeBombs(),
+            ConnectFour(),
         ]
         self.index: int = 0
         self.time: int = 0
@@ -49,9 +51,13 @@ class Controller:
             commands = self.games[self.index].update(pressed_buttons)
             for command in commands:
                 if isinstance(command, ExitCommand):
-                    self.state = "show_score"
-                    self.time = 0
-                    self.score = command.score
+                    if (command.score > 0):
+                        self.state = "show_score"
+                        self.time = 0
+                        self.score = command.score
+                    else:
+                        self.state = "select_game"
+                        self.time = 0
 
         if self.state == "show_score":
 
