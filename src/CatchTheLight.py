@@ -15,7 +15,7 @@ class CatchTheLight(Game):
     def info(self) -> GameInfo:
         return GameInfo(
             name="CatchTheLight",
-            description="Rush to catch the light as many times as you can before the time runs out.",
+            description="Rush to catch the light as many times as you can before the time runs out",
             creator="Magnus K",
         )
 
