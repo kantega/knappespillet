@@ -19,7 +19,6 @@ class TapTendrils(Game):
         return GameInfo(
             name="TapTendrils",
             description="Tap the tendrils to prevent them from reaching the bottom. You have a guard in each column.",
-            image_path="src/images/tux.png",
             creator="Per Thomas",
         )
 

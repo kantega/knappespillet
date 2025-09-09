@@ -1,4 +1,5 @@
-import pygame
+import math
+
 from pygame import Surface
 from pygame.freetype import Font
 
@@ -26,9 +27,10 @@ class Controller:
         self.time: int = 0
         self.score: int = 0
         self.last_pressed_buttons: set[tuple[int, int]] = set()
-        self.large_font: Font = Font(file="src/fonts/Space_Mono/SpaceMono-Regular.ttf", size=32)
-        self.small_font: Font = Font(file="src/fonts/Space_Mono/SpaceMono-Regular.ttf", size=20)
-        self.image: Surface = pygame.image.load("src/images/tux.png")
+        self.large_font: Font = Font(file="src/fonts/Space_Mono/SpaceMono-Regular.ttf", size=96)
+        self.small_font: Font = Font(file="src/fonts/Space_Mono/SpaceMono-Regular.ttf", size=64)
+        self.large_font.origin = True
+        self.small_font.origin = True
 
     def update(self, pressed_buttons: set[tuple[int, int]]) -> None:
 
@@ -91,9 +93,24 @@ class Controller:
         surface = Surface(size=(1280, 720))
         game_info = self.games[self.index].info()
 
-        self.large_font.render_to(surface, dest=(20, 20), text=game_info.name, fgcolor=(255, 0, 0))
-        self.small_font.render_to(surface, dest=(20, 80), text=game_info.description, fgcolor=(0, 255, 0))
-
-        surface.blit(self.image, dest=(100, 200))
+        draw_text(surface, (32, 32), game_info.name, self.large_font, (255, 255, 255), 1280 - 64)
+        draw_text(surface, (32, 64 + 96), game_info.description, self.small_font, (255, 255, 255), 1280 - 64)
 
         return surface
+
+
+def draw_text(surface: Surface, dest: tuple[int, int], text: str, font: Font, color: tuple[int, int, int], max_width: int):
+    (dest_x, dest_y) = dest
+    char_bounds = font.get_rect('X')
+    x = char_bounds.x
+    y = char_bounds.y
+
+    for word in text.split(' '):
+        word_bounds = font.get_rect(word)
+        if x + word_bounds.x + word_bounds.width >= max_width:
+            x = 0
+            y += math.floor(char_bounds.height * 1.5)
+        if x + word_bounds.x + word_bounds.width >= max_width:
+            raise RuntimeError("word is too long")
+        font.render_to(surface, (dest_x + x, dest_y + y), word, color)
+        x += word_bounds.width + char_bounds.width

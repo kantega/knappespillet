@@ -18,8 +18,7 @@ class TapDance(Game):
     def info(self) -> GameInfo:
         return GameInfo(
             name="TapDance",
-            description="Keep at least one button pushed while avoiding the lights",
-            image_path="src/images/tux.png",
+            description="Keep at least one button pushed while avoiding the lights.",
             creator="Per Thomas",
         )
 
