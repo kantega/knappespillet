@@ -148,7 +148,7 @@ class ConnectFour(Game):
         if self.gameState == GAME_STATE_P1_WIN or self.gameState == GAME_STATE_P2_WIN:
             # if winner animation is done, set game state to menu
             if self.time > 180:
-                return [ExitCommand(score=0)]
+                return [ExitCommand(None)]
 
             # After 3 seconds, start cleanup animation
             if self.time == 90:

@@ -4,7 +4,7 @@ from Board import Board
 
 
 class ExitCommand:
-    def __init__(self, score: int):
+    def __init__(self, score: int | None):
         self.score = score
 
 

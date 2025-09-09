@@ -72,7 +72,7 @@ class TickTackToe(Game):
             elif self.state == "score":
                 self.time += 1
                 if self.time > 4 * 30:
-                    return [ExitCommand(score=0)]
+                    return [ExitCommand(score=None)]
 
             return []
 

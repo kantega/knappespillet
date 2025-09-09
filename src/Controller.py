@@ -53,13 +53,12 @@ class Controller:
             commands = self.games[self.index].update(pressed_buttons)
             for command in commands:
                 if isinstance(command, ExitCommand):
-                    if (command.score > 0):
+                    if command.score is not None:
                         self.state = "show_score"
                         self.time = 0
                         self.score = command.score
                     else:
                         self.state = "select_game"
-                        self.time = 0
 
         if self.state == "show_score":
 
